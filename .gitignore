@@ -1,0 +1,24 @@
+# Binaires compilés
+/watchdog
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Fichiers de test / couverture
+*.test
+*.out
+coverage.*
+
+# Dépendances vendorées
+/vendor/
+
+# Config locale (dé-commenter si le fichier ne doit pas être versionné)
+# watchdog.json
+
+# Divers OS / éditeurs
+.DS_Store
+*.swp
+*~
+.idea/
+.vscode/
