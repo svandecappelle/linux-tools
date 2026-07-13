@@ -1,0 +1,15 @@
+{
+  "patterns": [
+    "/opt/Webex/bin/CiscoCollabHost"
+  ],
+  "targets": [
+    { "pattern": "firefox", "limit": "5GiB" }
+  ],
+  "limit": "3GiB",
+  "interval": "5s",
+  "grace_kill": "2s",
+  "bar_width": 20,
+  "max_events": 8,
+  "notify": true,
+  "notify_percent": 70
+}
