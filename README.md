@@ -26,11 +26,83 @@ L'affichage est un tableau de bord en terminal qui se rafraîchit en place.
 - Journal des dernières actions (arrêts déclenchés).
 - Configuration par fichier JSON ou arguments de ligne de commande.
 
-## Compilation
+## Installation
+
+### Prérequis
+
+- **Go ≥ 1.24** (`go version`).
+- Linux (l'outil lit `/proc`). Pour les notifications desktop : un serveur de
+  notifications (D-Bus / `notify-send`, présent par défaut sur GNOME, KDE, etc.).
+  Absent, les notifications échouent silencieusement sans gêner la surveillance.
+
+### Compiler
+
+Depuis la racine du dépôt :
 
 ```bash
 go build -o watchdog ./cmd/watchdog
 ```
+
+Le binaire `watchdog` est autonome (aucune dépendance à l'exécution).
+
+### Installer dans le PATH
+
+Le plus simple, directement depuis GitHub (sans cloner le dépôt) — installe le
+binaire dans `$(go env GOPATH)/bin` (par défaut `~/go/bin`) :
+
+```bash
+go install github.com/svandecappelle/linux-tools/cmd/watchdog@latest
+```
+
+Depuis un clone local, l'équivalent est :
+
+```bash
+go install ./cmd/watchdog
+```
+
+Assurez-vous que ce dossier est dans votre `PATH` (à ajouter à `~/.profile`,
+`~/.bashrc` ou `~/.zshrc` si besoin) :
+
+```bash
+export PATH="$PATH:$(go env GOPATH)/bin"
+```
+
+Ou copiez le binaire compilé à la main dans un dossier du `PATH` :
+
+```bash
+go build -o watchdog ./cmd/watchdog
+sudo install -m 0755 watchdog /usr/local/bin/watchdog   # tout le système
+# ou, sans droits admin :
+install -m 0755 watchdog ~/.local/bin/watchdog          # utilisateur courant
+```
+
+Vérifiez :
+
+```bash
+watchdog -config /chemin/vers/watchdog.json
+```
+
+### Lancement automatique au démarrage (optionnel)
+
+`watchdog` est une application **interactive de terminal** : elle a besoin d'un
+terminal (un `tty`). Elle ne peut donc pas tourner en service d'arrière-plan pur
+(un service systemd sans terminal se terminerait sur l'erreur
+`could not open a new TTY`).
+
+Pour la lancer à l'ouverture de session, ajoutez une entrée d'autostart qui
+ouvre un terminal exécutant `watchdog`. Exemple pour les bureaux compatibles
+freedesktop (GNOME, KDE, XFCE…), dans `~/.config/autostart/watchdog.desktop` :
+
+```ini
+[Desktop Entry]
+Type=Application
+Name=Memory Watchdog
+Exec=gnome-terminal -- watchdog -config %h/.config/watchdog/watchdog.json
+Terminal=false
+```
+
+Adaptez `gnome-terminal --` à votre émulateur (`konsole -e`, `xterm -e`,
+`kitty`, `alacritty -e`…).
 
 ## Utilisation
 

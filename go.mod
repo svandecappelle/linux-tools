@@ -1,4 +1,4 @@
-module watchdog
+module github.com/svandecappelle/linux-tools
 
 go 1.24.0
 
